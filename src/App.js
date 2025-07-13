@@ -1,7 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 /** @jsxImportSource @emotion/react */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { css } from '@emotion/react';
 
 const KanbanBoard = ({ children }) => {
@@ -25,11 +25,36 @@ const KanbanColumn = ({ children, className, title }) => {
     </section>
   )
 }
+const MINUTE = 60 * 1000;
+const HOUR = 60 * MINUTE;
+const DAY = 24 * HOUR;
+const UPDATE_INTERVAL = MINUTE;
+
 const KanbanCard = ({ title, status }) => {
+  const [displayTime, setDisplayTime] = useState(status);
+  useEffect(() => {
+    const updateDisplayTime = () => {
+      const timePassed = new Date() - new Date(status);
+      let relativeTime = '刚刚';
+      if (MINUTE <= timePassed && timePassed < HOUR) {
+        relativeTime = `${Math.ceil(timePassed / MINUTE)} 分钟前`;
+      } else if (HOUR <= timePassed && timePassed < DAY) {
+        relativeTime = `${Math.ceil(timePassed / HOUR)} 小时前`;
+      } else if (DAY <= timePassed) {
+        relativeTime = `${Math.ceil(timePassed / DAY)} 天前`;
+      }
+      setDisplayTime(relativeTime);
+    };
+    const intervalId = setInterval(updateDisplayTime, UPDATE_INTERVAL);
+    updateDisplayTime();
+    return function cleanup() {
+      clearInterval(intervalId);
+    }
+  }, [status])
   return (
     <li className="kanban-card">
       <div className="card-title">{title}</div>
-      <div className="card-status">{status}</div>
+      <div className="card-status" title={status}>{displayTime}</div>
     </li>
   );
 };
@@ -59,19 +84,19 @@ const KanbanNewCard = ({ onSubmit, setKey }) => {
 function App() {
   const [showAdd, setShowAdd] = useState(false);
   const [todoList, setTodoList] = useState([
-    { title: '开发任务-1', status: '25-05-22 18:15' },
-    { title: '开发任务-3', status: '25-05-22 18:15' },
-    { title: '开发任务-5', status: '25-05-22 18:15' },
-    { title: '测试任务-3', status: '25-05-22 18:15' }
+    { title: '开发任务-1', status: '2025-07-13 15:49' },
+    { title: '开发任务-3', status: '2025-07-13 12:49' },
+    { title: '开发任务-5', status: '2025-07-13 11:49' },
+    { title: '测试任务-3', status: '2025-07-11 15:49' }
   ]);
   const [ongoingList, setOngoingList] = useState([
-    { title: '开发任务-4', status: '25-05-22 18:15' },
-    { title: '开发任务-6', status: '25-05-22 18:15' },
-    { title: '测试任务-2', status: '25-05-22 18:15' }
+    { title: '开发任务-4', status: '2025-07-13 15:49' },
+    { title: '开发任务-6', status: '2025-07-13 15:49' },
+    { title: '测试任务-2', status: '2025-07-13 15:49' }
   ]);
   const [doneList, setDoneList] = useState([
-    { title: '开发任务-2', status: '25-05-22 18:15' },
-    { title: '测试任务-1', status: '25-05-22 18:15' }
+    { title: '开发任务-2', status: '2025-07-13 15:49' },
+    { title: '测试任务-1', status: '2025-07-13 15:49' }
   ]);
   const handleAdd = (e) => {
     setShowAdd(true);
