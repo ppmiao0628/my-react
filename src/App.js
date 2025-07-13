@@ -1,7 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 /** @jsxImportSource @emotion/react */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { css } from '@emotion/react';
 
 const KanbanBoard = ({ children }) => {
@@ -50,7 +50,7 @@ const KanbanCard = ({ title, status }) => {
     return function cleanup() {
       clearInterval(intervalId);
     }
-  }, [status])
+  }, [status]);
   return (
     <li className="kanban-card">
       <div className="card-title">{title}</div>
@@ -64,18 +64,21 @@ const KanbanNewCard = ({ onSubmit, setKey }) => {
   const handleChange = (e) => {
     setTitle(e.target.value);
   };
+  const inputElem = useRef(null);
+  useEffect(() => {
+    inputElem.current.focus();
+  }, []);
   const handleKeyDown = (e) => {
     console.log('ppm e-36', e);
     if (e.key === 'Enter') {
       onSubmit(title, setKey);
-      console.log('ppm setKey-40', setKey);
     }
   }
   return (
     <li className="kanban-card">
       <h3>添加新卡片</h3>
       <div className="card-title">
-        <input type="text" value={title} onChange={handleChange} onKeyDown={handleKeyDown} />
+        <input type="text" ref={inputElem} value={title} onChange={handleChange} onKeyDown={handleKeyDown} />
       </div>
     </li>
   )
@@ -109,11 +112,11 @@ function App() {
   }
   const handleSubmit = (title, setKey) => {
     SetKeyMap[setKey](currentTodoList => [
-      { title, status: new Date().toDateString() },
+      { title, status: new Date().getTime() },
       ...currentTodoList
     ])
     // todoList.unshift({ title, status: new Date().toDateString() });
-    // setShowAdd(false);
+    setShowAdd(false);
   }
   return (
     <div className="App">
