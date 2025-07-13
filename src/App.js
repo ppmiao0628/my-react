@@ -97,12 +97,6 @@ function App() {
             {showAdd && <KanbanNewCard onSubmit={handleSubmit} setKey={ 'setTodoList' } />}
             {
               todoList.map(props=><KanbanCard key={props.title} {...props}/>)
-              // new Array(10).fill('').map((item, index) => (
-              //   <li key={index} className="kanban-card">
-              //     <div className="card-title">开发任务-{index+1}</div>
-              //     <div className="card-status">25-07-11 19:19</div>
-              //   </li>
-              // ))
             }
           </ul>
         </section>
