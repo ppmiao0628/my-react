@@ -1,10 +1,19 @@
 import logo from './logo.svg';
 import './App.css';
-import React, { Children, useState } from 'react';
+/** @jsxImportSource @emotion/react */
+import React, { useState } from 'react';
+import { css } from '@emotion/react';
 
 const KanbanBoard = ({ children }) => {
   return (
-    <main className="kanban-board">{ children }</main>
+    // <main className="kanban-board">{ children }</main>
+    <main css={css`
+      display: flex;
+      flex-direction: row;
+      flex: 10;
+      gap: 1rem;
+      margin: 0 1rem 1rem;
+      `}>{children}</main>
   )
 }
 const KanbanColumn = ({ children, className, title }) => {
