@@ -51,8 +51,12 @@ const KanbanCard = ({ title, status }) => {
       clearInterval(intervalId);
     }
   }, [status]);
+  const handleDragStart = (evt) => {
+    evt.dataTransfer.effectAllowed = 'move';
+    evt.dataTransfer.setData('text/plain', title);
+  }
   return (
-    <li className="kanban-card">
+    <li className="kanban-card" draggable onDragStart={handleDragStart}>
       <div className="card-title">{title}</div>
       <div className="card-status" title={status}>{displayTime}</div>
     </li>
