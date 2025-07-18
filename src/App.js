@@ -2,59 +2,14 @@ import logo from './logo.svg';
 import './App.css';
 /** @jsxImportSource @emotion/react */
 import React, { useState, useRef, useEffect } from 'react';
-import { css } from '@emotion/react';
+import KanbanBoard from './KanbanBoard'
+import KanbanColumn from './KanbanColumn'
 
 const COLUMN_KEY_TODO = 'COLUMN_KEY_TODO';
 const COLUMN_KEY_ONGOING = 'COLUMN_KEY_ONGOING';
 const COLUMN_KEY_DONE = 'COLUMN_KEY_DONE';
 
-const KanbanBoard = ({ children }) => {
-  return (
-    // <main className="kanban-board">{ children }</main>
-    <main css={css`
-      display: flex;
-      flex-direction: row;
-      flex: 10;
-      gap: 1rem;
-      margin: 0 1rem 1rem;
-      `}>{children}</main>
-  )
-}
-const KanbanColumn = ({
-  children, className, title,
-  setIsDragSource = () => { },
-  setIsDragTarget = () => { },
-  onDrop
- }) => {
-  const combinedClassName = `kanban-column ${className}`;
-  return (
-    <section
-      onDragStart={()=>setIsDragSource(true)}
-      onDragOver={(evt) => {
-        evt.preventDefault();
-        evt.dataTransfer.dropEffect = 'move';
-        setIsDragTarget(true);
-      }}
-      onDragLeave={(evt) => {
-        evt.preventDefault();
-        evt.dataTransfer.dropEffect = 'none';
-        setIsDragTarget(false);
-      }}
-      onDrop={(evt) => {
-        evt.preventDefault();
-        onDrop && onDrop(evt);
-      }}
-      onDragEnd={(evt) => {
-        evt.preventDefault();
-        setIsDragSource(false);
-        setIsDragTarget(false);
-      }}
-      className={combinedClassName}>
-      <h2>{title}</h2>
-      <ul>{children}</ul>
-    </section>
-  )
-}
+
 const MINUTE = 60 * 1000;
 const HOUR = 60 * MINUTE;
 const DAY = 24 * HOUR;
