@@ -1,78 +1,14 @@
 import logo from './logo.svg';
 import './App.css';
 /** @jsxImportSource @emotion/react */
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import KanbanBoard from './KanbanBoard'
 import KanbanColumn from './KanbanColumn'
-
+import { KanbanCard } from './KanbanCard'
+import { KanbanNewCard } from './KanbanNewCard'
 const COLUMN_KEY_TODO = 'COLUMN_KEY_TODO';
 const COLUMN_KEY_ONGOING = 'COLUMN_KEY_ONGOING';
 const COLUMN_KEY_DONE = 'COLUMN_KEY_DONE';
-
-
-const MINUTE = 60 * 1000;
-const HOUR = 60 * MINUTE;
-const DAY = 24 * HOUR;
-const UPDATE_INTERVAL = MINUTE;
-
-const KanbanCard = ({ title, status, onDragStart }) => {
-  const [displayTime, setDisplayTime] = useState(status);
-  useEffect(() => {
-    const updateDisplayTime = () => {
-      const timePassed = new Date() - new Date(status);
-      let relativeTime = '刚刚';
-      if (MINUTE <= timePassed && timePassed < HOUR) {
-        relativeTime = `${Math.ceil(timePassed / MINUTE)} 分钟前`;
-      } else if (HOUR <= timePassed && timePassed < DAY) {
-        relativeTime = `${Math.ceil(timePassed / HOUR)} 小时前`;
-      } else if (DAY <= timePassed) {
-        relativeTime = `${Math.ceil(timePassed / DAY)} 天前`;
-      }
-      setDisplayTime(relativeTime);
-    };
-    const intervalId = setInterval(updateDisplayTime, UPDATE_INTERVAL);
-    updateDisplayTime();
-    return function cleanup() {
-      clearInterval(intervalId);
-    }
-  }, [status]);
-  const handleDragStart = (evt) => {
-    evt.dataTransfer.effectAllowed = 'move';
-    evt.dataTransfer.setData('text/plain', title);
-    onDragStart && onDragStart(evt);
-  }
-  return (
-    <li className="kanban-card" draggable onDragStart={handleDragStart}>
-      <div className="card-title">{title}</div>
-      <div className="card-status" title={status}>{displayTime}</div>
-    </li>
-  );
-};
-
-const KanbanNewCard = ({ onSubmit, setKey }) => {
-  const [title, setTitle] = useState('');
-  const handleChange = (e) => {
-    setTitle(e.target.value);
-  };
-  const inputElem = useRef(null);
-  useEffect(() => {
-    inputElem.current.focus();
-  }, []);
-  const handleKeyDown = (e) => {
-    console.log('ppm e-36', e);
-    if (e.key === 'Enter') {
-      onSubmit(title, setKey);
-    }
-  }
-  return (
-    <li className="kanban-card">
-      <h3>添加新卡片</h3>
-      <div className="card-title">
-        <input type="text" ref={inputElem} value={title} onChange={handleChange} onKeyDown={handleKeyDown} />
-      </div>
-    </li>
-  )
-}
 
 function App() {
   const [showAdd, setShowAdd] = useState(false);
