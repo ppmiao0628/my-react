@@ -24,9 +24,9 @@ function App() {
     { title: '开发任务-2', status: '2025-07-13 15:49' },
     { title: '测试任务-1', status: '2025-07-13 15:49' }
   ]);
-  const handleSubmit = (title) => {
+  const handleAdd = (newCard) => {
     setTodoList(currentTodoList => [
-      { title, status: new Date().getTime() },
+      newCard,
       ...currentTodoList
     ])
     // todoList.unshift({ title, status: new Date().toDateString() });
@@ -61,7 +61,7 @@ function App() {
       <KanbanBoard>
         <KanbanColumn className="column-todo" title="待处理"
           canAddNew={true}
-          onAdd={handleSubmit}
+          onAdd={handleAdd}
           cardList={todoList}
           setDraggedItem={setDraggedItem}
           setIsDragSource={(isSrc) => setDragSource(isSrc ? COLUMN_KEY_TODO : null)}
@@ -78,7 +78,6 @@ function App() {
           setIsDragTarget={(isTgt) => setDragTarget(isTgt ? COLUMN_KEY_ONGOING : null)}
           onDrop={handleDrop}
         >
-          {/* <KanbanNewCard onSubmit={handleSubmit} setKey={ 'setOngoingList' } /> */}
         </KanbanColumn>
         <KanbanColumn
           className="column-done"
@@ -89,7 +88,6 @@ function App() {
           setIsDragTarget={(isTgt) => setDragTarget(isTgt ? COLUMN_KEY_DONE : null)}
           onDrop={handleDrop}
         >
-          {/* <KanbanNewCard onSubmit={handleSubmit} setKey={ 'setDoneList' } /> */}
         </KanbanColumn>
       </KanbanBoard>
     </div>
